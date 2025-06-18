@@ -305,4 +305,4 @@ If you encounter any issues or have questions, please create an issue in the rep
 ---
 
 **Built with ❤️ by ~Aaditya Hasabnis (VIIT) Computer Engineer**  
-[Resume Link 👈🏻](https://drive.google.com/file/d/1C-K2_uOi1GOMG5peOuFWL0IMf63DBlwV/view)
+[Resume Link 👈🏻](https://drive.google.com/file/d/1wfwMiEbK6u0jJOk7-pzn5Z9USP9i9BPi/view)
