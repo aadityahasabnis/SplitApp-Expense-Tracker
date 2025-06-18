@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 // API Base URL
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL =
+  "https://splitapp-expense-tracker.onrender.com/api" ||
+  "http://localhost:5000/api";
 
 // Context
 const AppContext = createContext();
