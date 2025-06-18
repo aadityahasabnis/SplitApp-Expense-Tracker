@@ -5,9 +5,9 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build": "echo 'No build process needed for Node.js backend'",
-    "dev": "nodemon server.js"
+    "server": "nodemon server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
