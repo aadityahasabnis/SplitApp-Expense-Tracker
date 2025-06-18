@@ -1,6 +1,6 @@
 import express from 'express';
 import Expense from '../models/Expense.js';
-import { validateExpense } from '../middleware/validation.js';
+import { validateExpenseCreate, validateExpenseUpdate } from '../middleware/validation.js';
 
 const router = express.Router();
 
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST /expenses - Add new expense
-router.post('/', validateExpense, async (req, res) => {
+router.post('/', validateExpenseCreate, async (req, res) => {
   try {
     const { amount, description, paid_by, participants, category, isRecurring, recurringFrequency } = req.body;
     
@@ -60,7 +60,7 @@ router.post('/', validateExpense, async (req, res) => {
 });
 
 // PUT /expenses/:id - Update expense
-router.put('/:id', validateExpense, async (req, res) => {
+router.put('/:id', validateExpenseUpdate, async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
