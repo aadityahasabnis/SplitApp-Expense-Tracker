@@ -171,14 +171,116 @@ npm run dev  # Frontend only (port 5173)
 
 The app automatically calculates the minimum number of transactions needed to settle all debts efficiently.
 
+## 🧮 Settlement Calculation Logic
+
+### How Balance Calculation Works
+
+The application uses a sophisticated algorithm to calculate who owes whom and determines the optimal settlement transactions:
+
+#### 1. **Balance Calculation Process**
+
+```text
+For each expense:
+1. Add the full amount to the payer's balance (positive)
+2. Subtract each participant's share from their balance (negative)
+3. Calculate shares based on split type:
+   - Equal Split: amount ÷ number of participants
+   - Percentage Split: (amount × percentage) ÷ 100
+   - Exact Split: predefined exact amounts
+```
+
+#### 2. **Settlement Optimization Algorithm**
+
+The app implements a **Greedy Settlement Algorithm** that minimizes transactions:
+
+```text
+1. Separate people into two groups:
+   - Creditors: People who are owed money (positive balance)
+   - Debtors: People who owe money (negative balance)
+
+2. Match debtors with creditors optimally:
+   - Take the largest debt and largest credit
+   - Create a settlement for the minimum of these two amounts
+   - Update balances and continue until all settled
+
+3. Result: Minimum number of transactions needed
+```
+
+#### 3. **Example Calculation**
+
+**Scenario**: 3 friends go to dinner
+
+```text
+Expense: ₹3000 dinner paid by Alice, split equally among Alice, Bob, Charlie
+
+Step 1 - Initial Balances:
+- Alice: +₹3000 (paid) - ₹1000 (share) = +₹2000 (is owed)
+- Bob: ₹0 (paid) - ₹1000 (share) = -₹1000 (owes)
+- Charlie: ₹0 (paid) - ₹1000 (share) = -₹1000 (owes)
+
+Step 2 - Settlement Optimization:
+Instead of:
+- Bob pays Alice ₹1000
+- Charlie pays Alice ₹1000
+Total: 2 transactions
+
+Optimized result:
+- Bob pays Alice ₹1000
+- Charlie pays Alice ₹1000
+Total: 2 transactions (same in this case)
+```
+
+**Complex Scenario**: Multiple expenses with different payers
+
+```text
+Expenses:
+1. ₹1200 lunch paid by Alice, split equally (Alice, Bob, Charlie)
+2. ₹900 movie paid by Bob, split equally (Alice, Bob, Charlie)
+3. ₹600 snacks paid by Charlie, split equally (Alice, Bob, Charlie)
+
+Balances:
+- Alice: +₹1200 - ₹400 - ₹300 - ₹200 = +₹300
+- Bob: +₹900 - ₹400 - ₹300 - ₹200 = ₹0
+- Charlie: +₹600 - ₹400 - ₹300 - ₹200 = -₹300
+
+Settlement:
+- Charlie pays Alice ₹300
+Total: 1 transaction (instead of multiple complex payments)
+```
+
+#### 4. **Algorithm Benefits**
+
+- **Minimized Transactions**: Reduces complex web of payments to simplest form
+- **Fair Settlement**: Ensures everyone pays exactly their share
+- **Real-time Updates**: Recalculates automatically when new expenses are added
+- **Multiple Split Types**: Handles equal, percentage, and exact splits seamlessly
+
+### 5. **Technical Implementation**
+
+The settlement logic is implemented in `/backend/routes/settlements.js`:
+
+- **`calculateBalances()`**: Processes all expenses to determine individual balances
+- **`calculateSettlements()`**: Applies the greedy algorithm for optimal settlements
+- **Real-time Processing**: Calculations happen on every API call for up-to-date results
+
+**API Endpoints for Settlement:**
+
+- `GET /api/settlements/balances` - Returns individual balances with status
+- `GET /api/settlements` - Returns optimized settlement suggestions
+
 ## 📸 Screenshots
 
-*Note: Add screenshots of your application here showing:*
-
 - Dashboard with expense overview
+![Dashboard with expense overview](./screenshots/image.png)
+
 - Add Expense form with split options
+![Add Expense form with split options](./screenshots/image-1.png)
+
 - Balance view with settlement suggestions
+![Balance view with settlement suggestions](./screenshots/image-2.png)
+
 - Analytics page with spending breakdown
+![Analytics page with spending breakdown](./screenshots/image-3.png)
 
 ## 🚀 Deployment
 
@@ -195,10 +297,6 @@ This project is deployed on:
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ## Support
 
