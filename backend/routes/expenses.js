@@ -26,13 +26,13 @@ router.get('/', async (req, res) => {
 router.post('/', validateExpenseCreate, async (req, res) => {
   try {
     const { amount, description, paid_by, participants, category, isRecurring, recurringFrequency } = req.body;
-    
+
     // If no participants specified, create equal split with payer
     let finalParticipants = participants;
     if (!participants || participants.length === 0) {
       finalParticipants = [{ name: paid_by, shareType: 'equal', share: 1 }];
     }
-    
+
     const expense = new Expense({
       amount,
       description,
@@ -42,9 +42,9 @@ router.post('/', validateExpenseCreate, async (req, res) => {
       isRecurring: isRecurring || false,
       recurringFrequency
     });
-    
+
     await expense.save();
-    
+
     res.status(201).json({
       success: true,
       data: expense,
@@ -64,19 +64,19 @@ router.put('/:id', validateExpenseUpdate, async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-    
+
     const expense = await Expense.findByIdAndUpdate(id, updateData, {
       new: true,
       runValidators: true
     });
-    
+
     if (!expense) {
       return res.status(404).json({
         success: false,
         message: 'Expense not found'
       });
     }
-    
+
     res.json({
       success: true,
       data: expense,
@@ -95,16 +95,16 @@ router.put('/:id', validateExpenseUpdate, async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const expense = await Expense.findByIdAndDelete(id);
-    
+
     if (!expense) {
       return res.status(404).json({
         success: false,
         message: 'Expense not found'
       });
     }
-    
+
     res.json({
       success: true,
       message: 'Expense deleted successfully'
@@ -133,7 +133,7 @@ router.get('/categories', async (req, res) => {
         $sort: { totalAmount: -1 }
       }
     ]);
-    
+
     res.json({
       success: true,
       data: categoryStats,
